@@ -3,8 +3,8 @@ Universal storage provides you an interface for storing files according to your 
 
 # Java APIs
 
-Provider                                    | Status                         | Logo           |
-------------------------------------------- | -------------------------------------------------
+Provider                                                                                | Status                         | Logo |
+--------------------------------------------------------------------------------------- | -------------------------------|------|
 ## [File system provider](https://github.com/dynamicloud/universal_storage_java_fs_api) | [![Build Status](https://travis-ci.org/dynamicloud/universal_storage_java_fs_api.svg?branch=master)](https://travis-ci.org/dynamicloud/universal_storage_java_fs_api)
 ![Version](https://img.shields.io/badge/api-v1.0.0-brightgreen.svg) | Hola |
 
