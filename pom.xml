@@ -1,0 +1,44 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <groupId>org.dynamicloud.api</groupId>
+  <artifactId>universalstorage.core</artifactId>
+  <version>1.0.0</version>
+  <packaging>jar</packaging>
+
+  <name>Universal Storage's Core</name>
+
+  <description>
+    Universal storage provides you an interface for storing files according to your needs. With this Universal Storage you will be able to store files in a s3's bucket, local file system, google drive, Etc.  Further, with minimal effort you can switch from one provider to another with no changes in your code.
+</description>
+  <url>http://maven.apache.org</url>
+
+  <properties>
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+  </properties>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>http://www.opensource.org/licenses/mit-license.php</url>
+        </license>
+    </licenses>
+
+  <dependencies>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <version>3.8.1</version>
+      <scope>test</scope>
+    </dependency>
+
+    <!-- https://mvnrepository.com/artifact/org.json/json -->
+    <dependency>
+        <groupId>org.json</groupId>
+        <artifactId>json</artifactId>
+        <version>20170516</version>
+    </dependency>
+
+  </dependencies>
+</project>
