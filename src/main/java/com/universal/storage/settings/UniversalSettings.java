@@ -45,6 +45,7 @@ public class UniversalSettings {
     private String s3region;
     private String googleDriveClientId;
     private String googleDriveClientSecret;
+    private String googleDriveRefreshToken;
     private String dropboxAccessToken;
     private Map<String, String> tags;    
     private boolean encryption;
@@ -114,6 +115,15 @@ public class UniversalSettings {
 
                 if (this.googleDriveClientId == null || "".equals(this.googleDriveClientId.trim())) {
                     throw new IllegalStateException("client_id is null");
+                }
+
+                this.googleDriveRefreshToken = googleDrive.getString("refresh_token");
+                if (this.googleDriveRefreshToken == null || "".equals(this.googleDriveRefreshToken.trim())) {
+                    this.googleDriveRefreshToken = System.getenv("refresh_token");
+                }
+
+                if (this.googleDriveRefreshToken == null || "".equals(this.googleDriveRefreshToken.trim())) {
+                    throw new IllegalStateException("refresh_token is null");
                 }
             } else if (this.provider == UniversalProvider.AWS_S3) {
                 /**
@@ -265,6 +275,13 @@ public class UniversalSettings {
      */
     public String getGoogleDriveClientSecret() {
         return this.googleDriveClientSecret;
+    }
+
+    /**
+     * This method returns the current google drive refresh token.
+     */
+    public String getGoogleDriveRefreshToken() {
+        return this.googleDriveRefreshToken;
     }
 
     /**
