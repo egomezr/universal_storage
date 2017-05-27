@@ -47,6 +47,13 @@ public class UniversalSettings {
     private String googleDriveClientSecret;
     private String googleDriveRefreshToken;
     private String dropboxAccessToken;
+
+    private String ftpUser;
+    private String ftpPassword;
+    private String ftpHost;
+    private int ftpPort;
+    private boolean isFTPPassive;
+    
     private Map<String, String> tags;    
     private boolean encryption;
     private UniversalProvider provider;
@@ -85,6 +92,44 @@ public class UniversalSettings {
 
             if (this.provider == UniversalProvider.FILE_SYSTEM) {
                 this.root = FileUtil.completeFileSeparator(this.root);
+            } else if (this.provider == UniversalProvider.FTP) {
+                JSONObject ftp = json.getJSONObject("ftp");
+
+                this.ftpUser = ftp.getString("ftp_user");
+                if (this.ftpUser == null || "".equals(this.ftpUser.trim())) {
+                    this.ftpUser = System.getenv("ftp_user");
+                }
+
+                if (this.ftpUser == null || "".equals(this.ftpUser.trim())) {
+                    throw new IllegalStateException("ftp_user is null");
+                }
+                //-----
+
+                this.ftpPassword = ftp.getString("ftp_password");
+                if (this.ftpPassword == null || "".equals(this.ftpPassword.trim())) {
+                    this.ftpPassword = System.getenv("ftp_password");
+                }
+
+                if (this.ftpPassword == null || "".equals(this.ftpPassword.trim())) {
+                    throw new IllegalStateException("ftp_password is null");
+                }
+                //-----
+
+                this.ftpHost = ftp.getString("ftp_host");
+                if (this.ftpHost == null || "".equals(this.ftpHost.trim())) {
+                    this.ftpHost = System.getenv("ftp_host");
+                }
+
+                if (this.ftpHost == null || "".equals(this.ftpHost.trim())) {
+                    throw new IllegalStateException("ftp_host is null");
+                }
+
+                this.ftpPort = ftp.getInt("ftp_port");
+                if (this.ftpPort < 0 || this.ftpPort > 65535) {
+                    throw new IllegalStateException("Invalida ftp_port");
+                }
+
+                this.isFTPPassive = ftp.getBoolean("ftp_passive");                
             } else if (this.provider == UniversalProvider.DROPBOX) {
                 JSONObject dropbox = json.getJSONObject("dropbox");
 
@@ -202,6 +247,8 @@ public class UniversalSettings {
             return UniversalProvider.GOOGLE_DRIVE;
         } else if ("dropbox".equals(p)) {
             return UniversalProvider.DROPBOX;
+        } else if ("ftp".equals(p)) {
+            return UniversalProvider.FTP;
         }
 
         return UniversalProvider.UNKNOWN;
@@ -296,5 +343,40 @@ public class UniversalSettings {
      */
     public String getS3Region() {
         return this.s3region;
+    }
+
+    /**
+     * Returns the ftp user
+     */
+    public String getFTPUser() {
+        return this.ftpUser;
+    }
+
+    /**
+     * Returns the ftp password
+     */
+    public String getFTPPassword() {
+        return this.ftpPassword;
+    }
+
+    /**
+     * Returns the ftp host
+     */
+    public String getFTPHost() {
+        return this.ftpHost;
+    }
+
+    /**
+     * Returns the ftp port
+     */
+    public int getFTPPort() {
+        return this.ftpPort;
+    }
+
+    /**
+     * Indicates if this ftp setting will be treated as passive. 
+     */
+    public boolean isFTPPassive() {
+        return this.isFTPPassive;
     }
 }

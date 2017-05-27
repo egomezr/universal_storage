@@ -26,5 +26,5 @@ package com.universal.storage;
  * This enum provides the available provides as attributes.
  */
 public enum UniversalProvider {
-    FILE_SYSTEM, AWS_S3, GOOGLE_DRIVE, DROPBOX, ONE_DRIVE, UNKNOWN;
+    FILE_SYSTEM, AWS_S3, GOOGLE_DRIVE, DROPBOX, ONE_DRIVE, FTP, UNKNOWN;
 }

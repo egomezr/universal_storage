@@ -133,6 +133,11 @@ public abstract class UniversalStorage {
      */
     abstract void clean() throws UniversalIOException ;
 
+    /**
+     * This method will be implemented by those providers that need a way to close connections, streams, etc.
+     */
+    void close() {}
+
     public static class Impl {
         /**
          * This method returns a UniversalStorage according to the provider.
@@ -210,6 +215,9 @@ public abstract class UniversalStorage {
             } else if (settings.getProvider() == UniversalProvider.DROPBOX) {
                 registerUniversalStorage("com.universal.storage.UniversalDropboxStorage", settings);
                 return STORAGES.get("com.universal.storage.UniversalDropboxStorage");
+            } else if (settings.getProvider() == UniversalProvider.FTP) {
+                registerUniversalStorage("com.universal.storage.UniversalFTPStorage", settings);
+                return STORAGES.get("com.universal.storage.UniversalFTPStorage");
             }
 
             return null;
