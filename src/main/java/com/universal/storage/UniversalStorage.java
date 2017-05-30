@@ -7,6 +7,8 @@ import java.io.InputStream;
 import java.io.File;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * The MIT License (MIT)
@@ -34,6 +36,7 @@ import java.util.HashMap;
  * This class declares and implements the available methods to manage files.
  */
 public abstract class UniversalStorage {
+    private Set<UniversalStorageListener> listeners = new HashSet<UniversalStorageListener>();
     protected UniversalSettings settings;
     private static final Object lock = new Object();
     private static final Map<String, UniversalStorage> STORAGES = new HashMap<String, UniversalStorage>();
@@ -131,12 +134,117 @@ public abstract class UniversalStorage {
      * This method cleans the context of this storage.  This method doesn't remove any file from the storage.
      * The method will clean the tmp folder to release disk usage.
      */
-    abstract void clean() throws UniversalIOException ;
+    abstract void clean() throws UniversalIOException;
 
     /**
      * This method will be implemented by those providers that need a way to close connections, streams, etc.
      */
     void close() {}
+
+    /**
+     * This method wipes the root folder of a storage, basically, will remove all files and folder in it.  
+     * Be careful with this method because in too many cases this action won't provide a rollback action.
+     */
+    abstract void wipe() throws UniversalIOException;
+
+    /**
+     * This method registers a new listener for this storage instance.
+     * The listener will be called according to the executed actions.
+     * 
+     * @param listener new listener to be registered. 
+     */
+    public void registerListener(UniversalStorageListener listener) {
+        this.listeners.add(listener);
+    }
+
+    /**
+     * This method triggers the error listener from the registered listeners.
+     * 
+     * @param error in context
+     */
+    protected void triggerOnErrorListeners(UniversalIOException error) {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onError(error);}catch(Exception ignore) {}
+        }
+    }
+
+    /**
+     * This method triggers the onStore listener from the registered listeners.
+     */
+    protected void triggerOnStoreFileListeners() {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onStoreFile();}catch(Exception ignore) {}
+        }
+    }
+
+    /**
+     * This method triggers the onFileStored listener from the registered listeners.
+     * 
+     * @param data in context
+     */
+    protected void triggerOnFileStoredListeners(UniversalStorageData data) {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onFileStored(data);}catch(Exception ignore) {}
+        }
+    }
+
+    /**
+     * This method triggers the onRemoveFile listener from the registered listeners.
+     */
+    protected void triggerOnRemoveFileListeners() {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onRemoveFile();}catch(Exception ignore) {}
+        }
+    }
+
+    /**
+     * This method triggers the onFileRemoved listener from the registered listeners.
+     */
+    protected void triggerOnFileRemovedListeners() {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onFileRemoved();}catch(Exception ignore) {}
+        }
+    }
+
+    /**
+     * This method triggers the onCreateFolder listener from the registered listeners.
+     * 
+     * @param error in context
+     */
+    protected void triggerOnCreateFolderListeners() {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onCreateFolder();}catch(Exception ignore) {}
+        }
+    }
+
+    /**
+     * This method triggers the onFolderCreated listener from the registered listeners.
+     * 
+     * @param data in context
+     */
+    protected void triggerOnFolderCreatedListeners(UniversalStorageData data) {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onFolderCreated(data);}catch(Exception ignore) {}
+        }
+    }
+
+    /**
+     * This method triggers the onRemoveFolder listener from the registered listeners.
+     */
+    protected void triggerOnRemoveFolderListeners() {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onRemoveFolder();}catch(Exception ignore) {}
+        }
+    }
+
+    /**
+     * This method triggers the onFolderRemoved listener from the registered listeners.
+     */
+    protected void triggerOnFolderRemovedListeners() {
+        for (UniversalStorageListener listener : this.listeners) {
+            try {listener.onFolderRemoved();}catch(Exception ignore) {}
+        }
+    }
 
     public static class Impl {
         /**
